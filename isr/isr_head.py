@@ -14,7 +14,7 @@ ma.inputMdstList(filelist=["../../root_file/isr_output.root"],path=main)
 ma.fillParticleList("p+:all", "", path=main) 
 ma.fillParticleList("pi-:all", "", path=main)
 ma.fillParticleList("anti-n0:all", "", path=main)
-ma.fillParticleList("gamma:all", "", path=main) # "tutti" because "all" is protected from cuts
+ma.fillParticleList("gamma:all", "", path=main) # "tutti" because "all" is protected from further cuts
 
 
 ma.reconstructDecay("vpho:list_rec -> p+:all pi-:all gamma:all",cut="",path=main)
