@@ -11,14 +11,14 @@ main = b2.Path()
 ma.inputMdstList(filelist=["../../root_file/isr_output.root"],path=main)
 
 # Ricostruzione delle particelle visibili
-ma.fillParticleList("p+:all", "", path=main) 
-ma.fillParticleList("pi-:all", "", path=main)
-ma.fillParticleList("anti-n0:all", "", path=main)
-ma.fillParticleList("gamma:all", "", path=main) # "tutti" because "all" is protected from further cuts
+ma.fillParticleListFromMC("p+:MC", "", path=main) 
+ma.fillParticleListFromMC("pi-:MC", "", path=main)
+ma.fillParticleListFromMC("anti-n0:MC", "", path=main)
+ma.fillParticleListFromMC("gamma:MC", "", path=main) # "tutti" because "all" is protected from further cuts
 
 
-ma.reconstructDecay("vpho:list_rec -> p+:all pi-:all gamma:all",cut="",path=main)
-ma.reconstructDecay("vpho:gen -> vpho:list_rec anti-n0:all ",cut="",path=main)
+ma.reconstructDecay("vpho:list_rec -> p+:MC pi-:MC gamma:MC",cut="",path=main)
+ma.reconstructDecay("vpho:gen -> vpho:list_rec anti-n0:MC ",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 
