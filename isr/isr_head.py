@@ -8,7 +8,7 @@ from variables import variables as vm
 
 main = b2.Path()
 
-ma.inputMdstList(filelist=["../../root_file/isr_output.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
 
 # Ricostruzione delle particelle visibili
 ma.fillParticleListFromMC("p+:MC", "", path=main) 
@@ -59,7 +59,7 @@ print(" *** ", cuts, " *** ")
 
 ma.applyCuts("vpho:gen", cuts, path=main)
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename="../../root_file/vpho_isr.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename="../../root_file/isr/vpho_isr.root",treename="tree",path=main,)
 
 
 b2.process(main)

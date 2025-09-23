@@ -9,7 +9,7 @@ from variables import variables as vm
 main = b2.Path()
 
 #carico il file del MC
-ma.inputMdstList(filelist=["../../root_file/my_mdst_output.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output.root"],path=main)
 
 # Ricostruzione delle particelle visibili
 ma.fillParticleList("p+:all", "", path=main) 
@@ -61,7 +61,7 @@ print(" *** ", cuts, " *** ")
 
 ma.applyCuts("Upsilon(4S):list_rec", cuts, path=main)
 
-ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars,filename="../../root_file/vpho_p_pi_n.root",treename="tree",path=main,)
+ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars,filename="../../root_file/nbar_recoil/vpho_p_pi_n.root",treename="tree",path=main,)
 
 b2.process(main)
 
