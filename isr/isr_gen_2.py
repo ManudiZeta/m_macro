@@ -8,6 +8,8 @@ import simulation as si
 import reconstruction as re
 import mdst
 
+SM = ROOT.TStopwatch() 
+SM.Start()
 
 N_ev = int(sys.argv[1])
 #decfile = sys.argv[2]
@@ -23,7 +25,7 @@ final_state_particles = ['p+', 'pi-', 'anti-n0'],
 user_decay_file = "../dec_file/dec_isr.dec",
 beam_energy_spread=True, 
 isr_events=True,
-min_inv_mass_vpho=2.1, max_inv_mass_vpho=8)
+min_inv_mass_vpho=2.1, max_inv_mass_vpho=9.)
 
 #beam_energy_spread=True, isr_events=True,min_inv_mass_vpho=2.1)
 
@@ -41,3 +43,8 @@ b2.process(path=main)
 
 # Finally, print out some statistics about the modules execution
 print(b2.statistics)
+
+
+print("\n Total time:")
+SM.Stop()
+SM.Print()

@@ -2,24 +2,18 @@
 
 import sys 
 import basf2 as b2 
-import modularAnalysis as ma #permette di fare analisi, creare particelle etc...
 import variables.collections as vc
+import modularAnalysis as ma 
 import variables.utils as vu
-
 
 main = b2.Path()
 
-#carico il file del MC
 ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output_Jpsi.root"],path=main)
 
-# Ricostruzione delle particelle visibili
 ma.fillParticleList("p+:all", "", path=main) 
 ma.fillParticleList("pi-:all", "", path=main)
 ma.fillParticleList("gamma:all", "", path=main)
 ma.fillParticleList("anti-n0:all", "", path=main)
-#ma.fillParticleListFromMC("anti-n0:mc", "", path=main) 
-
-# combine final state particles to form composite particles--->combino gli e-e+ dello stato finale per ricondurli al decadimento di una J/psi
 
 ma.reconstructDecay("vpho:list_rec ->  p+:all pi-:all", cut=" ", path=main)
 ma.reconstructDecay("J/psi:list_rec ->  vpho:list_rec anti-n0:all", cut=" ", path=main)
@@ -27,15 +21,12 @@ ma.reconstructDecay("Upsilon(4S):list_rec -> J/psi:list_rec gamma:all", cut=" ",
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
 
-
-#Def some variables
-
-b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] #+ vc.recoil_kinematics
+b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] 
 
 daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
-b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> ^J/psi  ^gamma")
-b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [J/psi -> vpho ^anti-n0] gamma")
+#b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> ^J/psi  ^gamma")
+b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [^J/psi -> ^vpho ^anti-n0] ^gamma")
 b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [J/psi -> [vpho -> ^p+ ^pi-] anti-n0] gamma")
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "J/psi -> [^vpho -> p+ pi-] anti-n0")
 
