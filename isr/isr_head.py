@@ -37,15 +37,14 @@ b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen
 b_vars = b_vars + vu.create_aliases_for_selected(g_vars, "vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] anti-n0", prefix = ["gamma"])
 
 
-"""
-vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(n0_theta)*cos(vpho_pRecoilPhi-n0_phi))")
-vm.addAlias("sec_arg","formula(cos(vpho_pRecoilTheta)*cos(n0_theta))")
+vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(nbar_theta)*cos(vpho_pRecoilPhi-nbar_phi))")
+vm.addAlias("sec_arg","formula(cos(vpho_pRecoilTheta)*cos(nbar_theta))")
 vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
 
-ma.rankByLowest("Upsilon(4S):list_rec", "alpha", numBest=1, path=main)
+ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
 
-b_vars = b_vars + ['alpha'] 
-"""
+b_vars = b_vars + ['alpha']
+
 
 #cmskinematics = vu.create_aliases(vc.kinematics + ['InvM','mRecoil','eRecoil'], "useCMSFrame({variable})", "CMS")
 #b_vars = b_vars + cmskinematics

@@ -16,25 +16,18 @@ ma.fillParticleList("p+:all", "", path=main)
 ma.fillParticleList("pi-:all", "", path=main)
 ma.fillParticleList("gamma:all", "", path=main)
 ma.fillParticleList("anti-n0:all", "", path=main)
-#ma.fillParticleListFromMC("anti-n0:mc", "", path=main) 
 
-# Ricostruzione vpho con particella mancante (cioè senza n0-bar)
+
 ma.reconstructDecay("vpho:list_rec -> p+:all pi-:all gamma:all",cut="",path=main)
 
-# Ricostruzione U(4S) con n0-bar_rec
 ma.reconstructDecay("Upsilon(4S):list_rec -> vpho:list_rec anti-n0:all ",cut="",path=main)
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
 
-#Def some variables
-
-b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
-
 daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
-# Guardo le grandezze di (p, pi-,gamma, n0bar) relative al decadimento della 4S
-b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
-# Guardo le grandezze di vpho per trovare le variabili di recoil
+b_vars = vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
+
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "Upsilon(4S) -> [^vpho -> p+ pi- gamma] anti-n0", prefix = ["vpho"])
 
 vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(nbar_theta)*cos(vpho_pRecoilPhi-nbar_phi))")
