@@ -30,11 +30,11 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
 
-b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "vpho:gen -> [vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0")
+b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "vpho:gen -> [vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
 
-b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen -> [^vpho:list_rec -> p+ pi- gamma] anti-n0")
+b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen -> [^vpho:list_rec -> p+ pi- gamma] anti-n0", prefix = ["vpho"])
 
-b_vars = b_vars + vu.create_aliases_for_selected(g_vars, "vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] anti-n0")
+b_vars = b_vars + vu.create_aliases_for_selected(g_vars, "vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] anti-n0", prefix = ["gamma"])
 
 
 """
@@ -51,13 +51,14 @@ b_vars = b_vars + ['alpha']
 #b_vars = b_vars + cmskinematics
 #print(b_vars)
 
-sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and vpho_p_mcPDG == 2212 and vpho_pi_mcPDG == -211 and vpho_gamma_mcPDG == 22" 
-dad_cuts = "vpho_p_genMotherPDG == 10022 and vpho_pi_genMotherPDG == 10022"
-n0_cuts = "n0_genMotherPDG == 10022"
+sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
+dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
+n0_cuts = "nbar_genMotherPDG == 10022"
 cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
 print(" *** ", cuts, " *** ")
 
 ma.applyCuts("vpho:gen", cuts, path=main)
+
 
 ma.variablesToNtuple("vpho:gen",variables=b_vars,filename="../../root_file/isr/vpho_isr.root",treename="tree",path=main,)
 

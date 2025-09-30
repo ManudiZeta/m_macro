@@ -33,12 +33,12 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
 # Guardo le grandezze di (p, pi-,gamma, n0bar) relative al decadimento della 4S
-b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0")
+b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
 # Guardo le grandezze di vpho per trovare le variabili di recoil
-b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "Upsilon(4S) -> [^vpho -> p+ pi- gamma] anti-n0")
+b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "Upsilon(4S) -> [^vpho -> p+ pi- gamma] anti-n0", prefix = ["vpho"])
 
-vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(n0_theta)*cos(vpho_pRecoilPhi-n0_phi))")
-vm.addAlias("sec_arg","formula(cos(vpho_pRecoilTheta)*cos(n0_theta))")
+vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(nbar_theta)*cos(vpho_pRecoilPhi-nbar_phi))")
+vm.addAlias("sec_arg","formula(cos(vpho_pRecoilTheta)*cos(nbar_theta))")
 vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
 
 ma.rankByLowest("Upsilon(4S):list_rec", "alpha", numBest=1, path=main)
@@ -53,9 +53,9 @@ b_vars = b_vars + ['alpha']
 
 print(b_vars)
 
-sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and vpho_p_mcPDG == 2212 and vpho_pi_mcPDG == -211 and vpho_gamma_mcPDG == 22" 
-dad_cuts = "vpho_p_genMotherPDG == 300553 and vpho_pi_genMotherPDG == 300553 and vpho_gamma_genMotherPDG== 300553"
-n0_cuts = "n0_genMotherPDG == 300553"
+sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
+dad_cuts = "p_genMotherPDG == 300553 and pi_genMotherPDG == 300553 and gamma_genMotherPDG== 300553"
+n0_cuts = "nbar_genMotherPDG == 300553"
 cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
 print(" *** ", cuts, " *** ")
 
