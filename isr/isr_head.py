@@ -12,18 +12,18 @@ choice = int(sys.argv[1]) # 0 = with photon, otherwise = without photon
 main = b2.Path()
 ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
 
-lista = "REC"
+lista = "MC"
 
 # Ricostruzione delle particelle visibili
-ma.fillParticleList(f"p+:{lista}", "", path=main) 
-ma.fillParticleList(f"pi-:{lista}", "", path=main)
-ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
+ma.fillParticleListFromMC(f"p+:{lista}", "", path=main) 
+ma.fillParticleListFromMC(f"pi-:{lista}", "", path=main)
+ma.fillParticleListFromMC(f"anti-n0:{lista}", "", path=main)
 
 if choice == 0:
     title = "gamma"
     print("*** ISR events WITH gamma in RecDecay *** \n")
 
-    ma.fillParticleList(f"gamma:{lista}", "", path=main) # "tutti" because "all" is protected from further cuts
+    ma.fillParticleListFromMC(f"gamma:{lista}", "", path=main) # "tutti" because "all" is protected from further cuts
     ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
 else:
     title = "no_gamma"
@@ -85,4 +85,4 @@ ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/
 
 b2.process(main)
 
-#print(b2.statistics)
+print(b2.statistics)
