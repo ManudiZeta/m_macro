@@ -10,15 +10,17 @@ main = b2.Path()
 
 ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
 
+lista = "REC"
+
 # Ricostruzione delle particelle visibili
-ma.fillParticleListFromMC("p+:MC", "", path=main) 
-ma.fillParticleListFromMC("pi-:MC", "", path=main)
-ma.fillParticleListFromMC("anti-n0:MC", "", path=main)
-ma.fillParticleListFromMC("gamma:MC", "", path=main) # "tutti" because "all" is protected from further cuts
+ma.fillParticleList(f"p+:{lista}", "", path=main) 
+ma.fillParticleList(f"pi-:{lista}", "", path=main)
+ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
+ma.fillParticleList(f"gamma:{lista}", "", path=main) # "tutti" because "all" is protected from further cuts
 
 
-ma.reconstructDecay("vpho:list_rec -> p+:MC pi-:MC gamma:MC",cut="",path=main)
-ma.reconstructDecay("vpho:gen -> vpho:list_rec anti-n0:MC ",cut="",path=main)
+ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
+ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista} ",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 
@@ -59,7 +61,7 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename="../../root_file/isr/vpho_isr.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{lista}.root",treename="tree",path=main,)
 
 
 b2.process(main)
