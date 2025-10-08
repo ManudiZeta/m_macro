@@ -13,16 +13,16 @@ ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output.root"],pa
 
 # Ricostruzione delle particelle visibili
 
-ma.fillParticleListFromMC("anti-n0:MC", "", path=main)
+ma.fillParticleListFromMC("gamma:MC", "", path=main)
 
-#ma.matchMCTruth("anti-n0:MC", path=main)
+#ma.matchMCTruth("gamma:all", path=main)
 
 #Def some variables
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta']
 
 
-ma.variablesToNtuple("anti-n0:MC",variables=b_vars,filename="../../root_file/nbar_recoil/phsp_list_n_MC.root",treename="tree",path=main,)
+ma.variablesToNtuple("gamma:MC",variables=b_vars,filename="../../root_file/nbar_recoil/phsp_list_gamma_MC.root",treename="tree",path=main,)
 
 
 b2.process(main)
