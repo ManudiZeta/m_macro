@@ -5,6 +5,7 @@ import modularAnalysis as ma
 import variables.collections as vc
 import variables.utils as vu
 from variables import variables as vm
+from variables.MCGenTopo import mc_gen_topo
 
 main = b2.Path()
 
@@ -54,7 +55,8 @@ print(" *** ", cuts, " *** ")
 
 ma.applyCuts("Upsilon(4S):list_rec", cuts, path=main)
 
-ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars,filename="../../root_file/nbar_recoil/vpho_p_pi_n.root",treename="tree",path=main,)
+ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars ,filename="../../root_file/nbar_recoil/vpho_p_pi_n.root",treename="tree",path=main,)
+ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename="../../root_file/test_TOPO/nbar_recoil/vpho_p_pi_n_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 

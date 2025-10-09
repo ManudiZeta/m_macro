@@ -6,6 +6,7 @@ import variables.collections as vc
 import variables.utils as vu
 import sys
 from variables import variables as vm
+from variables.MCGenTopo import mc_gen_topo
 
 choice = int(sys.argv[1]) # 0 = with photon, otherwise = without photon
 
@@ -81,7 +82,7 @@ ma.applyCuts("vpho:gen", cuts, path=main)
 
 
 ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{title}_{lista}.root",treename="tree",path=main,)
-
+ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/test_TOPO/vpho_isr_{title}_{lista}_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
