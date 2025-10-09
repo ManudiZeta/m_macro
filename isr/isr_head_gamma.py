@@ -80,7 +80,7 @@ cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_nb_{title}_{lista}.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_nbg_{title}_{lista}.root",treename="tree",path=main,)
 
 
 b2.process(main)
