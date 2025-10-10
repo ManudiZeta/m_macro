@@ -82,7 +82,7 @@ ma.applyCuts("vpho:gen", cuts, path=main)
 
 
 ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_nbg_{title}_{lista}.root",treename="tree",path=main,)
-ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/test_TOPO/vpho_isr_nbg_{title}_{lista}_TOPO.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_nbg_{title}_{lista}_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
