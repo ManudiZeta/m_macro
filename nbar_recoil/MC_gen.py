@@ -30,7 +30,7 @@ si.add_simulation(path=main)
 re.add_reconstruction(path=main)
  
 # Create the mDST output file
-mdst.add_mdst_output(path=main, filename='../../root_file/nbar_recoil/my_mdst_output.root')
+mdst.add_mdst_output(path=main, filename='../../root_file/nbar_recoil/my_mdst_output_Jpsi.root')
 
 # Process the steering path
 b2.process(path=main)
