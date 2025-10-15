@@ -19,25 +19,25 @@ lista = "REC"
 ma.fillParticleList(f"p+:{lista}", "", path=main) 
 ma.fillParticleList(f"pi-:{lista}", "", path=main)
 ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
+ma.fillParticleList(f"gamma:{lista}", "", path=main) 
 
 ma.reconstructDecay(f"vpho:list_rec ->  p+:{lista} pi-:{lista}", cut=" ", path=main)
 ma.reconstructDecay(f"J/psi:list_rec ->  vpho:list_rec anti-n0:{lista}", cut=" ", path=main)
 
 if choice == 0:
+    ma.reconstructDecay(f"Upsilon(4S):list_rec -> J/psi:list_rec gamma:{lista}", cut=" ", path=main)
     title = "gamma"
     print("*** PHSP events WITH gamma in RecDecay *** \n")
-    ma.fillParticleList(f"gamma:{lista}", "", path=main)
-    ma.reconstructDecay(f"Upsilon(4S):list_rec -> J/psi:list_rec gamma:{lista}", cut=" ", path=main)
 
 else:
+    ma.reconstructDecay(f"Upsilon(4S):list_rec -> J/psi:list_rec", cut=" ", path=main)
     title = "no_gamma"
     print("*** PHSP events WITHOUT gamma in RecDecay *** \n")
-    ma.reconstructDecay(f"Upsilon(4S):list_rec -> J/psi:list_rec", cut=" ", path=main)
 
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
 
-g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta' , 'mcPrimary']
+g_vars = vc.kinematics + vc.mc_kinematics + ['mcErrors', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta', 'mcPrimary']
 
 daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
@@ -46,11 +46,15 @@ if choice == 0:
 
     b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [^J/psi -> [^vpho -> ^p+ ^pi-] ^anti-n0] ^gamma", prefix = ["Jpsi", "vpho", "p", "pi", "nbar", "gamma"] )
 
-    #b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [J/psi -> [vpho -> ^p+ ^pi-] anti-n0] gamma", prefix = ["p", "pi"] )
+    #b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> ^J/psi ^gamma", prefix = ["Jpsi", "gamma"] )
 else:
     b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [^J/psi -> [^vpho -> ^p+ ^pi-] ^anti-n0]", prefix = ["Jpsi", "vpho", "p", "pi", "nbar"] )
 
-    #b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [J/psi -> [vpho -> ^p+ ^pi-] anti-n0]", prefix = ["p", "pi"] )
+    #b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> ^J/psi", prefix = ["Jpsi", "gamma"] )
+
+
+#b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "J/psi -> ^vpho ^anti-n0", prefix = ["vpho", "nbar"] )
+#b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "vpho -> ^p+ ^pi-", prefix = ["p", "pi"] )
 
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "Upsilon(4S) -> [J/psi -> [^vpho -> p+ pi-] anti-n0]", prefix = ["vpho"] )
 

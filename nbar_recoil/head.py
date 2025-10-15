@@ -25,7 +25,7 @@ ma.reconstructDecay("Upsilon(4S):list_rec -> vpho:list_rec anti-n0:all ",cut="",
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
 
-daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
+daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
 b_vars = vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
 
