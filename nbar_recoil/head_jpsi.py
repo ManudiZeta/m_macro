@@ -63,7 +63,7 @@ vm.addAlias("fir_arg","formula(sin(vpho_pRecoilTheta)*sin(nbar_theta)*cos(vpho_p
 vm.addAlias("sec_arg","formula(cos(vpho_pRecoilTheta)*cos(nbar_theta))")
 vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
 
-ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
+ma.rankByLowest("Upsilon(4S):list_rec", "alpha", numBest=1, path=main)
 
 b_vars = b_vars + ['alpha']
 '''

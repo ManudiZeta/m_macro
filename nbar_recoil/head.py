@@ -4,15 +4,21 @@ import basf2 as b2
 import modularAnalysis as ma
 import variables.collections as vc
 import variables.utils as vu
+import sys
 from variables import variables as vm
 from variables.MCGenTopo import mc_gen_topo
 
+
+choice = int(sys.argv[1]) # 0 = original channel, 1 = J/psi channel
+
 main = b2.Path()
+if choice == 0: 
+    ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output.root"],path=main)
+else: 
+    ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output_Jpsi.root"],path=main)
 
-#carico il file del MC
-ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output.root"],path=main)
+lista = "REC"
 
-# Ricostruzione delle particelle visibili
 ma.fillParticleList("p+:all", "", path=main) 
 ma.fillParticleList("pi-:all", "", path=main)
 ma.fillParticleList("gamma:all", "", path=main)
@@ -20,7 +26,6 @@ ma.fillParticleList("anti-n0:all", "", path=main)
 
 
 ma.reconstructDecay("vpho:list_rec -> p+:all pi-:all gamma:all",cut="",path=main)
-
 ma.reconstructDecay("Upsilon(4S):list_rec -> vpho:list_rec anti-n0:all ",cut="",path=main)
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
@@ -48,15 +53,26 @@ b_vars = b_vars + ['alpha']
 print(b_vars)
 
 sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
-dad_cuts = "p_genMotherPDG == 300553 and pi_genMotherPDG == 300553 and gamma_genMotherPDG== 300553"
-n0_cuts = "nbar_genMotherPDG == 300553"
+
+if choice == 0:
+    dad_cuts = "p_genMotherPDG == 300553 and pi_genMotherPDG == 300553 and gamma_genMotherPDG== 300553"
+    n0_cuts = "nbar_genMotherPDG == 300553"
+
+else:
+    dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443 and gamma_genMotherPDG== 300553 " #è giusto o provengono da vpho (10022) a livello di generatore? giusto 443, infatti non vi sono entries per 10022 quando non applico i tagli
+    n0_cuts = "nbar_genMotherPDG == 443" #stesso discorso qui
+
 cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
 print(" *** ", cuts, " *** ")
-
 ma.applyCuts("Upsilon(4S):list_rec", cuts, path=main)
 
-ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars ,filename="../../root_file/nbar_recoil/vpho_p_pi_n.root",treename="tree",path=main,)
-ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename="../../root_file/nbar_recoil/phsp_TOPO/vpho_p_pi_n_TOPO.root",treename="tree",path=main,)
+if choice == 0:
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars ,filename=f"../../root_file/nbar_recoil/vpho_p_pi_n_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename=f"../../root_file/nbar_recoil/phsp_TOPO/vpho_p_pi_n_{lista}TOPO.root",treename="tree",path=main,)
+
+else:
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars,filename=f"../../root_file/nbar_recoil/vpho_Jpsi_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename=f"../../root_file/nbar_recoil/phsp_TOPO/vpho_Jpsi_phsp_{lista}_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
