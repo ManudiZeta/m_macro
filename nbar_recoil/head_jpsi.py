@@ -18,8 +18,8 @@ lista = "REC"
 
 ma.fillParticleList(f"p+:{lista}", "", path=main) 
 ma.fillParticleList(f"pi-:{lista}", "", path=main)
-ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 ma.fillParticleList(f"gamma:{lista}", "", path=main) 
+ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec ->  p+:{lista} pi-:{lista}", cut=" ", path=main)
 ma.reconstructDecay(f"J/psi:list_rec ->  vpho:list_rec anti-n0:{lista}", cut=" ", path=main)
