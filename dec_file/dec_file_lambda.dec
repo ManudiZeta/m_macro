@@ -1,0 +1,14 @@
+Decay Upsilon(4S)
+  1.0  B0  anti-B0  PHSP;
+Enddecay
+
+Decay B0
+  1.0  Lambda0  anti-Lambda0  K0   PHSP;
+Enddecay
+CDecay myB0
+
+# Lambda -> p + pi-
+Decay myLambda
+  1.0  p+  pi-   VSS;
+Enddecay
+CDecay myLambda

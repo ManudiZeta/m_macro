@@ -41,7 +41,7 @@ g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','p
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 
-daug_vars = ['isSignal','PDG','mcPDG', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
+daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcFSR', 'genMotherPDG','genMotherID','clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','isFromECL','isFromTrack','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
 if choice == 0: 
     b_vars = b_vars + vu.create_aliases_for_selected(daug_vars, "vpho:gen -> [vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
@@ -69,9 +69,9 @@ b_vars = b_vars + ['alpha']
 #print(b_vars)
 
 if choice == 0: 
-    sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
+    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22 and alpha < 0.35" 
 else:
-    sig_cuts = "vpho_mRecoil>0 and vpho_mRecoil <2 and p_mcPDG == 2212 and pi_mcPDG == -211" 
+    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and alpha < 0.35" 
 
 dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
 n0_cuts = "nbar_genMotherPDG == 10022"

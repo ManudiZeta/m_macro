@@ -32,7 +32,7 @@ if choice == 1:
 
 ma.matchMCTruth("Upsilon(4S):list_rec", path=main)
 
-daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcFSR', 'genMotherPDG','genMotherID','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
+daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcFSR', 'genMotherPDG','genMotherID','clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','isFromECL','isFromTrack','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
 b_vars = vu.create_aliases_for_selected(daug_vars, "Upsilon(4S) -> [vpho -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["p", "pi", "gamma", "nbar"])
 
@@ -59,17 +59,17 @@ b_vars = b_vars +['nbarE_buona']
 
 print(b_vars)
 
-sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
+sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22 and alpha < 0.35" 
 
 if choice == 0:
     dad_cuts = "p_genMotherPDG == 300553 and pi_genMotherPDG == 300553 and gamma_genMotherPDG== 300553"
-    n0_cuts = "nbar_genMotherPDG == 300553"
+    #n0_cuts = "nbar_genMotherPDG == 300553"
 
 else:
     dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443 and gamma_genMotherPDG== 300553 " #è giusto o provengono da vpho (10022) a livello di generatore? giusto 443, infatti non vi sono entries per 10022 quando non applico i tagli
-    n0_cuts = "nbar_genMotherPDG == 443" #stesso discorso qui
+    #n0_cuts = "nbar_genMotherPDG == 443" #stesso discorso qui
 
-cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
+cuts= sig_cuts + " and " + dad_cuts 
 print(" *** ", cuts, " *** ")
 ma.applyCuts("Upsilon(4S):list_rec", cuts, path=main)
 
