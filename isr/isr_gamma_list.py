@@ -6,24 +6,28 @@ import variables.collections as vc
 import variables.utils as vu
 from variables import variables as vm
 import sys
+from variables.MCGenTopo import mc_gen_topo
 
 main = b2.Path()
 
 #carico il file del MC
-ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/isr_output_False.root"],path=main)
 
 # Ricostruzione delle particelle visibili
 
-ma.fillParticleListFromMC("anti-n0:MC", "", path=main)
+ma.fillParticleListFromMC("gamma:MC", "", path=main)
 
 #ma.matchMCTruth("anti-n0:MC", path=main)
+
 
 #Def some variables
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta']
 
+ma.applyCuts("gamma:MC", "mcISR == 1", path=main)
 
-ma.variablesToNtuple("anti-n0:MC",variables=b_vars,filename="../../root_file/isr/isr_list_n_MC.root",treename="tree",path=main,)
+ma.variablesToNtuple("gamma:MC",variables=b_vars,filename="../../root_file/isr/isr_list_n_MC_False.root",treename="tree",path=main,)
+ma.variablesToNtuple("gamma:MC",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isr_list_n_MC_False_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
