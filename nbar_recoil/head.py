@@ -17,12 +17,12 @@ if choice == 0:
 if choice == 1:  
     ma.inputMdstList(filelist=["../../root_file/nbar_recoil/my_mdst_output_Jpsi.root"],path=main)
 
-lista = "MC"
+lista = "REC"
 
-ma.fillParticleListFromMC(f"p+:{lista}", "", path=main) 
-ma.fillParticleListFromMC(f"pi-:{lista}", "", path=main)
-ma.fillParticleListFromMC(f"gamma:{lista}", "", path=main) 
-ma.fillParticleListFromMC(f"anti-n0:{lista}", "", path=main)
+ma.fillParticleList(f"p+:{lista}", "", path=main) 
+ma.fillParticleList(f"pi-:{lista}", "", path=main)
+ma.fillParticleList(f"gamma:{lista}", "", path=main) 
+ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
 ma.reconstructDecay(f"Upsilon(4S):list_rec -> vpho:list_rec anti-n0:{lista} ",cut="",path=main)
@@ -74,8 +74,8 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("Upsilon(4S):list_rec", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars ,filename=f"../../root_file/nbar_recoil/vpho_p_pi_n_{lista}.root",treename="tree",path=main,)
-    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename=f"../../root_file/nbar_recoil/phsp_TOPO/vpho_p_pi_n_{lista}_TOPO.root",treename="tree",path=main,)
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars ,filename=f"../../root_file/nbar_recoil/vpho_p_pi_n_{lista}_35.root",treename="tree",path=main,)
+    ma.variablesToNtuple("Upsilon(4S):list_rec",variables=mc_gen_topo(200),filename=f"../../root_file/nbar_recoil/phsp_TOPO/vpho_p_pi_n_{lista}_TOPO_35.root",treename="tree",path=main,)
 
 else:
     ma.variablesToNtuple("Upsilon(4S):list_rec",variables=b_vars,filename=f"../../root_file/nbar_recoil/vpho_Jpsi_{lista}.root",treename="tree",path=main,)

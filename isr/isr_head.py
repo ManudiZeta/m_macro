@@ -11,7 +11,7 @@ from variables.MCGenTopo import mc_gen_topo
 choice = int(sys.argv[1]) # 0 = with photon, otherwise = without photon
 
 main = b2.Path()
-ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/isr_output_False.root"],path=main)
 
 lista = "REC"
 
@@ -69,20 +69,20 @@ b_vars = b_vars + ['alpha']
 #print(b_vars)
 
 if choice == 0: 
-    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22 and alpha < 0.35" 
+    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22" 
 else:
-    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and alpha < 0.35" 
+    sig_cuts = "vpho_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211" 
 
 dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
-n0_cuts = "nbar_genMotherPDG == 10022"
-cuts= sig_cuts + " and " + dad_cuts + " and " + n0_cuts
+#n0_cuts = "nbar_genMotherPDG == 10022"
+cuts= sig_cuts + " and " + dad_cuts 
 #print(" *** ", cuts, " *** ")
 
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{title}_{lista}.root",treename="tree",path=main,)
-ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{title}_{lista}_TOPO.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{title}_{lista}_False.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{title}_{lista}_False_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
