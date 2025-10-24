@@ -3,7 +3,7 @@ import sys
 import ROOT
 import basf2 as b2
 import generators as ge
-#from myphokara import add_phokhara_evtgen_combination
+from myphokara import add_phokhara_evtgen_combination
 import simulation as si
 import reconstruction as re
 import mdst
@@ -20,11 +20,11 @@ main = b2.Path()
 # Define number of events and experiment number
 main.add_module('EventInfoSetter', evtNumList=[N_ev], expList=[0])
 
-ge.add_phokhara_evtgen_combination(path=main,
+add_phokhara_evtgen_combination(path=main,
 final_state_particles = ['p+', 'pi-', 'anti-n0'], 
-user_decay_file = "../dec_file/dec_isr.dec",) 
-#beam_energy_spread=True,  
-#isr_events=True)
+user_decay_file = "../dec_file/dec_isr.dec",
+beam_energy_spread=True,  
+isr_events=True)
 #min_inv_mass_vpho=2.1, max_inv_mass_vpho=10.6)
 
 # Simulate the detector response 
@@ -34,7 +34,7 @@ si.add_simulation(path=main)
 re.add_reconstruction(path=main)
  
 # Create the mDST output file
-mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_False.root')
+mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_True.root')
 
 # Process the steering path
 b2.process(path=main)

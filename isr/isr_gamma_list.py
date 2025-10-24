@@ -15,7 +15,7 @@ ma.inputMdstList(filelist=["../../root_file/isr/isr_output_False.root"],path=mai
 
 # Ricostruzione delle particelle visibili
 
-ma.fillParticleListFromMC("gamma:MC", "", path=main)
+ma.fillParticleListFromMC("p+:MC", "", path=main)
 
 #ma.matchMCTruth("anti-n0:MC", path=main)
 
@@ -24,10 +24,12 @@ ma.fillParticleListFromMC("gamma:MC", "", path=main)
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta']
 
-ma.applyCuts("gamma:MC", "mcISR == 1", path=main)
+cuts = "genMotherPDG == 10022"
 
-ma.variablesToNtuple("gamma:MC",variables=b_vars,filename="../../root_file/isr/isr_list_n_MC_False.root",treename="tree",path=main,)
-ma.variablesToNtuple("gamma:MC",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isr_list_n_MC_False_TOPO.root",treename="tree",path=main,)
+ma.applyCuts("p+:MC", cuts, path=main)
+
+ma.variablesToNtuple("p+:MC",variables=b_vars,filename="../../root_file/isr/isr_list_n_MC_False.root",treename="tree",path=main,)
+ma.variablesToNtuple("p+:MC",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isr_list_n_MC_False_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
