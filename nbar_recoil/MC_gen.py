@@ -11,8 +11,8 @@ import mdst
 SM = ROOT.TStopwatch() 
 SM.Start()
 
-N_ev = int(sys.argv[1])
-choice = int(sys.argv[2])
+N_ev = int(sys.argv[1]) #number of events
+choice = int(sys.argv[2]) # 0 = classic channel, 1 = J/psi channel
 
 # Create the steering path
 main = b2.Path()
