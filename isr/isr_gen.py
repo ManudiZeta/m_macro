@@ -3,7 +3,7 @@ import sys
 import ROOT
 import basf2 as b2
 import generators as ge
-from myphokara import add_phokhara_evtgen_combination
+#from myphokara import add_phokhara_evtgen_combination
 import simulation as si
 import reconstruction as re
 import mdst
@@ -30,11 +30,11 @@ if choice == 1:
 # Define number of events and experiment number
 main.add_module('EventInfoSetter', evtNumList=[N_ev], expList=[0])
 
-add_phokhara_evtgen_combination(path=main,
+ge.add_phokhara_evtgen_combination(path=main,
 final_state_particles = final_state, 
-user_decay_file = decfile,
-beam_energy_spread=True,  
-isr_events=True)
+user_decay_file = decfile,)
+#beam_energy_spread=True,  
+#isr_events=True)
 #min_inv_mass_vpho=2.1, max_inv_mass_vpho=10.6)
 
 # Simulate the detector response 
@@ -45,9 +45,9 @@ re.add_reconstruction(path=main)
  
 # Create the mDST output file
 if choice == 0:
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_test.root')
+    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_test_False.root')
 if choice == 1:
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_Jpsi_test.root')
+    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_Jpsi_test_False.root')
 # Process the steering path
 b2.process(path=main)
 
