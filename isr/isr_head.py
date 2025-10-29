@@ -16,24 +16,24 @@ if choice == 0:
 if choice == 1:  
     ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_Jpsi.root"],path=main)
 
-lista = "REC"
+lista = "MC"
 
 # Ricostruzione delle particelle visibili
-ma.fillParticleList(f"p+:{lista}", "", path=main) 
-ma.fillParticleList(f"pi-:{lista}", "", path=main)
-ma.fillParticleList(f"gamma:{lista}", "", path=main) 
-ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
+ma.fillParticleListFromMC(f"p+:{lista}", "", path=main) 
+ma.fillParticleListFromMC(f"pi-:{lista}", "", path=main)
+ma.fillParticleListFromMC(f"gamma:{lista}", "", path=main) 
+ma.fillParticleListFromMC(f"anti-n0:{lista}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
 ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista} ",cut="",path=main)
 
 if choice == 1:
-    ma.reconstructDecay(f" J/psi:list_rec -> p+:{lista} pi-:{lista} anti-n0:{lista}",cut="",path=main)
+    ma.reconstructDecay(f"J/psi:list_rec -> p+:{lista} pi-:{lista} anti-n0:{lista}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 
 #Variables
-g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta' , 'mcPrimary']
+#g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta' , 'mcPrimary']
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 
@@ -72,7 +72,7 @@ if choice == 0:
     #n0_cuts = "nbar_genMotherPDG == 300553"
 
 else:
-    dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443" #è giusto o provengono da vpho (10022) a livello di generatore? giusto 443, infatti non vi sono entries per 10022 quando non applico i tagli
+    dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443 and JPsi_genMotherPDG == 10022" #è giusto o provengono da vpho (10022) a livello di generatore? giusto 443, infatti non vi sono entries per 10022 quando non applico i tagli
     #n0_cuts = "nbar_genMotherPDG == 443" #stesso discorso qui
 
 cuts= sig_cuts + " and " + dad_cuts 
@@ -80,12 +80,12 @@ print(" *** ", cuts, " *** ")
 #ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{lista}_test.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}_test_TOPO.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{lista}.root",treename="tree",path=main,)
+    #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
 
 else:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}_test.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}_test_TOPO.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}.root",treename="tree",path=main,)
+    #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}.root",treename="tree",path=main,)
 
 b2.process(main)
 

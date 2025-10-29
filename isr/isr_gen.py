@@ -15,18 +15,25 @@ parser.add_argument(
     choices=["std", "J/psi"],
     help="Select the desired channel"
 )
-args = parser.parse_args()
-print(args.channel)
 
+parser.add_argument(
+    "-output", "--output",
+    required=True,
+    help="Output name"
+)
+args = parser.parse_args()
+
+output_path = f"../../root_file/isr/{args.output}"
+if not output_path.endswith(".root"):
+    output_path += ".root
+
+# ****** START ******
 SM = ROOT.TStopwatch() 
 SM.Start()
 
-#N_ev = int(sys.argv[1]) #number of events
-#choice = int(sys.argv[1]) # 0 = classic channel (phokhara evt_gen), 1 = J/psi channel (vector_ISR)
-# Create the steering path
 main = b2.Path()
 
-# Define number of events and experiment number
+# Define number of events (-n number in terminal )and experiment number
 main.add_module('EventInfoSetter', expList=[0])
 
 if args.channel == 'std': 
@@ -39,8 +46,6 @@ if args.channel == 'std':
     user_decay_file = decfile,)
     #beam_energy_spread=True,  
     #isr_events=True)
-
-    #min_inv_mass_vpho=2.1, max_inv_mass_vpho=10.6)
     
 
 if args.channel == 'J/psi':   
@@ -65,9 +70,9 @@ re.add_reconstruction(path=main)
  
 # Create the mDST output file
 if args.channel == 'std':
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isr_output_test_False.root')
+    mdst.add_mdst_output(path=main, filename=output_path)
 if args.channel == 'J/psi':
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isrVEC_output_Jpsi.root')
+    mdst.add_mdst_output(path=main, filename=output_path)
 
 # Process the steering path
 b2.process(path=main)
