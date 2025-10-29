@@ -11,25 +11,24 @@ from variables.MCGenTopo import mc_gen_topo
 main = b2.Path()
 
 #carico il file del MC
-ma.inputMdstList(filelist=["../../root_file/isr/isr_output_Jpsi_test_False.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_Jpsi.root"],path=main)
 
 # Ricostruzione delle particelle visibili
 
-ma.fillParticleListFromMC("p+:MC", "", path=main)
+ma.fillParticleListFromMC("gamma:MC", "", path=main)
 
 #ma.matchMCTruth("anti-n0:MC", path=main)
-
 
 #Def some variables
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta']
 
-cuts = "genMotherPDG == 443"
+cuts = "genMotherPDG == 10022"
 
-ma.applyCuts("p+:MC", cuts, path=main)
+ma.applyCuts("gamma:MC", cuts, path=main)
 
-ma.variablesToNtuple("p+:MC",variables=b_vars,filename="../../root_file/isr/isr_list_n_MC_Jpsi_False.root",treename="tree",path=main,)
-ma.variablesToNtuple("p+:MC",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isr_list_n_MC_Jpsi_False.root",treename="tree",path=main,)
+ma.variablesToNtuple("gamma:MC",variables=b_vars,filename="../../root_file/isr/isrVEC_list_gamma_MC_Jpsi.root",treename="tree",path=main,)
+ma.variablesToNtuple("gamma:MC",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isrVEC_list_gamma_MC_Jpsi.root",treename="tree",path=main,)
 
 b2.process(main)
 

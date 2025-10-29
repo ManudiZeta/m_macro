@@ -14,7 +14,7 @@ main = b2.Path()
 if choice == 0: 
     ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
 if choice == 1:  
-    ma.inputMdstList(filelist=["../../root_file/isr/isr_output_Jpsi_test_False.root"],path=main)
+    ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_Jpsi.root"],path=main)
 
 lista = "REC"
 
@@ -84,8 +84,8 @@ if choice == 0:
     ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}_test_TOPO.root",treename="tree",path=main,)
 
 else:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isr_{lista}_test.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_Jpsi_isr_{lista}_test_TOPO.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}_test.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}_test_TOPO.root",treename="tree",path=main,)
 
 b2.process(main)
 
