@@ -11,7 +11,7 @@ from variables.MCGenTopo import mc_gen_topo
 main = b2.Path()
 
 #carico il file del MC
-ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_Jpsi.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output.root"],path=main)
 
 # Ricostruzione delle particelle visibili
 
@@ -23,7 +23,7 @@ ma.fillParticleListFromMC("gamma:MC", "", path=main)
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta']
 
-cuts = "genMotherPDG == 10022"
+cuts = "genMotherPDG == 300553"
 
 ma.applyCuts("gamma:MC", cuts, path=main)
 
