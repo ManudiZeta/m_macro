@@ -44,14 +44,14 @@ if args.channel == 'J/psi':
     final_state = ['J/psi']
     decfile = "../dec_file/dec_isrVEC_jpsi.dec"
     #Generate isr events with evt_gen_VECTORISR
-    ge.add_evtgen_generator(path=main,finalstate='signal',signaldecfile=b2.find_file(decfile))
-    '''
+    #ge.add_evtgen_generator(path=main,finalstate='signal',signaldecfile=b2.find_file(decfile))
+
     main.add_module(
         'EvtGenInput',
         userDECFile=decfile,
         ParentParticle='vpho'
     )
-    '''
+
 main.add_module('PrintMCParticles', onlyPrimaries = False)
 
 # Simulate the detector response 
@@ -64,7 +64,7 @@ re.add_reconstruction(path=main)
 if args.channel == 'std':
     mdst.add_mdst_output(path=main, filename= '../../root_file/isr/isr_output.root' )
 if args.channel == 'J/psi':
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isrVEC_output_4S.root')
+    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isrVEC_output_vpho.root')
 
 # Process the steering path
 b2.process(path=main)
