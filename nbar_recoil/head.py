@@ -54,7 +54,8 @@ b_vars = b_vars +['nbarE_buona']
 
 print(b_vars)
 
-sig_cuts = "vpho_r_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22 and alpha < 0.35" 
+sig_cuts = "vpho_r_mRecoil>0 and alpha < 0.35 and nbar_isFromECL == 1" 
+sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
 
 if choice == 0:
     dad_cuts = "p_genMotherPDG == 300553 and pi_genMotherPDG == 300553 and gamma_genMotherPDG== 300553"
@@ -64,9 +65,10 @@ else:
     dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443 and gamma_genMotherPDG== 300553 " #è giusto o provengono da vpho (10022) a livello di generatore? giusto 443, infatti non vi sono entries per 10022 quando non applico i tagli
     #n0_cuts = "nbar_genMotherPDG == 443" #stesso discorso qui
 
-cuts= sig_cuts + " and " + dad_cuts 
+cuts= sig_cuts + " and "  + sig_select + " and " + dad_cuts 
 print(" *** ", cuts, " *** ")
 ma.applyCuts("Upsilon(4S):gen", cuts, path=main)
+
 
 if choice == 0:
     ma.variablesToNtuple("Upsilon(4S):gen",variables=b_vars ,filename=f"../../root_file/nbar_recoil/channel_std/vpho_p_pi_n_{lista}.root",treename="tree",path=main,)

@@ -57,7 +57,8 @@ b_vars = b_vars +['nbarE_buona']
 
 print(b_vars)
 
-sig_cuts = "vpho_r_mRecoil>0 and p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22 and alpha < 0.35" 
+sig_cuts = "vpho_r_mRecoil > 0 and alpha < 0.35 and nbar_isFromECL == 1" 
+sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
 
 if choice == 0:
     dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
@@ -67,7 +68,7 @@ else:
     dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443" #and JPsi_genMotherPDG == 10022"
     #n0_cuts = "nbar_genMotherPDG == 443" 
 
-cuts= sig_cuts + " and " + dad_cuts 
+cuts= sig_cuts + " and "  + sig_select + " and " + dad_cuts 
 print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
