@@ -14,7 +14,7 @@ main = b2.Path()
 if choice == 0: 
     ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
 if choice == 1:  
-    ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_vpho.root"],path=main)
+    ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
 
@@ -25,12 +25,7 @@ ma.fillParticleList(f"gamma:{lista}", "", path=main)
 ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
-
-if choice == 0:
-    ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista} ",cut="",path=main)
-if choice == 1:
-    ma.reconstructDecay(f"J/psi:list_rec -> vpho:list_rec anti-n0:{lista}",cut="",path=main)
-    ma.reconstructDecay(f"vpho:gen -> J/psi:list_rec",cut="",path=main)
+ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 
@@ -41,12 +36,8 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 
 daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcISR','mcFSR', 'genMotherPDG','genMotherID','clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','isFromECL','isFromTrack','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
-if choice == 0:
-    b_vars = vu.create_aliases_for_selected(daug_vars, "^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["vpho_g","vpho_r","p", "pi", "gamma", "nbar"])
-    b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen -> [^vpho:list_rec -> p+ pi- gamma] anti-n0", prefix = ["vpho_r"])
-if choice == 1:
-    b_vars = vu.create_aliases_for_selected(daug_vars, "^vpho:gen -> [^J/psi -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0]", prefix = ["vpho_g","JPsi","vpho_r","p", "pi", "gamma", "nbar"])
-    b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen -> [J/psi -> [^vpho:list_rec -> p+ pi- gamma] anti-n0]", prefix = ["vpho_r"])
+b_vars = vu.create_aliases_for_selected(daug_vars, "^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["mum","vpho_r","p", "pi", "gamma", "nbar"])
+b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, "vpho:gen -> [^vpho:list_rec -> p+ pi- ^gamma] anti-n0", prefix = ["vpho_r","gamma"])
     
 #Personal variable alpha
 vm.addAlias("fir_arg","formula(sin(vpho_r_pRecoilTheta)*sin(nbar_theta)*cos(vpho_r_pRecoilPhi-nbar_phi))")
@@ -85,7 +76,7 @@ if choice == 0:
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
 
 else:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}_vpho.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}.root",treename="tree",path=main,)
 
 b2.process(main)

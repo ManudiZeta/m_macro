@@ -50,10 +50,11 @@ if choice == 1:
 
 
 #Recoil variable
+cmskinematics = vu.create_aliases(vc.kinematics + ['InvM','mRecoil','eRecoil'], "useCMSFrame({variable})", "CMS")
 vm.addAlias("mRecoil_three","daughterCombination(mRecoil, 0, 1, 2)")
-vm.addAlias("pRecoil_three","daughterCombination(pRecoil, 0, 1, 2)")
-vm.addAlias("pRecoilPhi_three","daughterCombination(pRecoilPhi, 0, 1, 2)")
-vm.addAlias("pRecoilTheta_three","daughterCombination(pRecoilTheta, 0, 1, 2)")
+vm.addAlias("pRecoil_three","daughterCombination(useCMSFrame(pRecoil), 0, 1, 2)")
+vm.addAlias("pRecoilPhi_three","daughterCombination(useCMSFrame(pRecoilPhi), 0, 1, 2)")
+vm.addAlias("pRecoilTheta_three","daughterCombination(useCMSFrame(pRecoilTheta), 0, 1, 2)")
 b_vars = b_vars +['mRecoil_three','pRecoil_three','pRecoilTheta_three','pRecoilPhi_three']
 
 #Personal variable alpha
@@ -92,7 +93,7 @@ ma.applyCuts("vpho:gen", cuts, path=main)
 if choice == 0:
     ma.variablesToNtuple("vpho:gen",
         variables=b_vars,
-        filename=f"../../root_file/isr/vpho_isr_{lista}.root",
+        filename=f"../../root_file/isr/vpho_isr_{lista}_testDaug.root",
         treename="tree",
         path=main,)
         #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
@@ -100,7 +101,7 @@ if choice == 0:
 else:
     ma.variablesToNtuple("vpho:gen",
         variables=b_vars,
-        filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}.root",
+        filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}_testDaug.root",
         treename="tree",
         path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}.root",treename="tree",path=main,)
