@@ -12,9 +12,9 @@ choice = int(sys.argv[1]) # 0 = original channel, 1 = J/psi channel
 
 main = b2.Path()
 if choice == 0: 
-    ma.inputMdstList(filelist=["../../root_file/isr/isr_output.root"],path=main)
+    ma.inputMdstList(filelist=["../../root_file/isr/channel_std/isrPhok_output.root"],path=main)
 if choice == 1:  
-    ma.inputMdstList(filelist=["../../root_file/isr/isrVEC_output_4S.root"],path=main)
+    ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
 
@@ -72,11 +72,11 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_isr_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_isr_{lista}.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
 
 else:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/vpho_Jpsi_isrVEC_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/vpho_Jpsi_isrVEC_{lista}.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}.root",treename="tree",path=main,)
 
 b2.process(main)

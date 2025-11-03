@@ -62,9 +62,9 @@ re.add_reconstruction(path=main)
  
 # Create the mDST output file
 if args.channel == 'std':
-    mdst.add_mdst_output(path=main, filename= '../../root_file/isr/isr_output.root' )
+    mdst.add_mdst_output(path=main, filename= '../../root_file/isr/channel_std/isrPhok_output.root' )
 if args.channel == 'J/psi':
-    mdst.add_mdst_output(path=main, filename='../../root_file/isr/isrVEC_output_vpho.root')
+    mdst.add_mdst_output(path=main, filename='../../root_file/isr/channel_JPsi/isrVEC_output_JPsi.root')
 
 # Process the steering path
 b2.process(path=main)
