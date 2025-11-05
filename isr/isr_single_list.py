@@ -17,6 +17,7 @@ ma.fillParticleListFromMC(f"p+:{lista}", "", path=main)
 ma.fillParticleListFromMC(f"pi-:{lista}", "", path=main)
 ma.fillParticleListFromMC(f"anti-n0:{lista}", "", path=main)
 
+#ma.fillParticleListFromMC(f"J/psi:{lista}", "", path=main)
 ma.reconstructMCDecay(f"J/psi:{lista} -> p+:{lista} pi-:{lista} anti-n0:{lista}",cut="",path=main)
 
 #ma.matchMCTruth("anti-n0:MC", path=main)

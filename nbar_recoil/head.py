@@ -54,7 +54,7 @@ b_vars = b_vars +['nbarE_buona']
 
 print(b_vars)
 
-sig_cuts = "vpho_r_mRecoil>0 and alpha < 0.35 and nbar_isFromECL == 1" 
+sig_cuts = "vpho_r_mRecoil > 0 and alpha < 0.35 and nbar_isFromECL == 1" 
 sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
 
 if choice == 0:
