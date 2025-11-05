@@ -17,21 +17,23 @@ if choice == 1:
     ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
-cand_hp = "anti-n0"
+cand_hp = "gamma"
+lista_n = "nbar"
 
 if cand_hp == "anti-n0":
     part = "n"
 else: 
     part = "g"
+    
 
 # Ricostruzione delle particelle visibili
 ma.fillParticleList(f"p+:{lista}", "", path=main) 
 ma.fillParticleList(f"pi-:{lista}", "", path=main)
 ma.fillParticleList(f"gamma:{lista}", "", path=main) 
-ma.fillParticleList(f"{cand_hp}:{lista}", "", path=main)
+ma.fillParticleList(f"{cand_hp}:{lista_n}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
-ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista}",cut="",path=main)
+ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 
