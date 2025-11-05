@@ -5,6 +5,7 @@ import modularAnalysis as ma
 import variables.collections as vc
 import variables.utils as vu
 import sys
+import kinfit
 from variables import variables as vm
 from variables.MCGenTopo import mc_gen_topo
 
@@ -17,7 +18,7 @@ if choice == 1:
     ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
-cand_hp = "gamma"
+cand_hp = "anti-n0"
 lista_n = "nbar"
 
 if cand_hp == "anti-n0":
@@ -25,7 +26,6 @@ if cand_hp == "anti-n0":
 else: 
     part = "g"
     
-
 # Ricostruzione delle particelle visibili
 ma.fillParticleList(f"p+:{lista}", "", path=main) 
 ma.fillParticleList(f"pi-:{lista}", "", path=main)
@@ -36,6 +36,7 @@ ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut
 ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
+kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
 
 #Variables
 #g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta' , 'mcPrimary']
@@ -81,11 +82,11 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_kin.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
 
 else:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/vpho_Jpsi_isr_{part}_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/vpho_Jpsi_isr_{part}_{lista}_kin.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isrVEC_TOPO/vpho_Jpsi_isr_{lista}.root",treename="tree",path=main,)
 
 b2.process(main)
