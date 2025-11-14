@@ -18,7 +18,7 @@ if choice == 1:
     ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
-cand_hp = "anti-n0"
+cand_hp = "gamma"
 lista_n = "nbar"
 
 if cand_hp == "anti-n0":
