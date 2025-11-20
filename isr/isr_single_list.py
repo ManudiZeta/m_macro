@@ -13,7 +13,7 @@ main = b2.Path()
 part= "gamma"
 lista = "MC"
 
-ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/channel_std/isrPhok_output_F100k.root"],path=main)
 
 '''
 ma.fillParticleListFromMC(f"p+:{lista}", "", path=main)
@@ -32,7 +32,7 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','M
 vm.addAlias("p_CMS","useCMSFrame(p)")
 b_vars = b_vars + ["p_CMS"]
 
-cuts = "genMotherPDG == 300553"
+cuts = "mcISR == 1"
 
 ma.applyCuts(f"{part}:{lista}", cuts, path=main)
 
