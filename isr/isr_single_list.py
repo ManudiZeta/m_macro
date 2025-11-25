@@ -10,10 +10,10 @@ from variables.MCGenTopo import mc_gen_topo
 
 main = b2.Path()
 
-part= "gamma"
+part= "p+"
 lista = "MC"
 
-ma.inputMdstList(filelist=["../../root_file/isr/channel_std/isrPhok_output_F100k.root"],path=main)
+ma.inputMdstList(filelist=["../../root_file/isr/channel_std/isrPhok_output_merge100k.root"],path=main)
 
 '''
 ma.fillParticleListFromMC(f"p+:{lista}", "", path=main)
@@ -32,12 +32,12 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','M
 vm.addAlias("p_CMS","useCMSFrame(p)")
 b_vars = b_vars + ["p_CMS"]
 
-cuts = "mcISR == 1"
+cuts = "genMotherPDG == 10022"
 
 ma.applyCuts(f"{part}:{lista}", cuts, path=main)
 
-ma.variablesToNtuple(f"{part}:{lista}",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/isrVEC_list_{part}_{lista}.root",treename="tree",path=main,)
-ma.variablesToNtuple(f"{part}:{lista}",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/isrVEC_list_Jpsi_{lista}.root",treename="tree",path=main,)
+ma.variablesToNtuple(f"{part}:{lista}",variables=b_vars,filename=f"../../root_file/isr/channel_std/list_{part}_{lista}.root",treename="tree",path=main,)
+ma.variablesToNtuple(f"{part}:{lista}",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/list_{part}_{lista}.root",treename="tree",path=main,)
 
 b2.process(main)
 

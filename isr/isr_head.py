@@ -18,7 +18,7 @@ if choice == 1:
     ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
-cand_hp = "anti-n0"
+cand_hp = "gamma"
 lista_n = "nbar"
 
 if cand_hp == "anti-n0":
@@ -32,11 +32,11 @@ ma.fillParticleList(f"pi-:{lista}", "pionID > 0.1", path=main)
 ma.fillParticleList(f"gamma:{lista}", "", path=main) 
 ma.fillParticleList(f"{cand_hp}:{lista_n}", "", path=main)
 
-ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
-ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="thetaInECLAcceptance",path=main)
+ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="thetaInECLAcceptance",path=main)
+ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
-kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
+#kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
 ma.getNeutralHadronGeomMatches(f"{cand_hp}:{lista_n}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
 
 #Variables
@@ -87,8 +87,8 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k_kin.root",treename="tree",path=main,)
-    #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_isr_{lista}.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
 
 else:
     ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/vpho_Jpsi_isr_{part}_{lista}_kin_50k.root",treename="tree",path=main,)
