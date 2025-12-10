@@ -18,7 +18,7 @@ if choice == 1:
     ma.inputMdstList(filelist=["../../root_file/isr/channel_JPsi/isrVEC_output_4S.root"],path=main)
 
 lista = "REC"
-cand_hp = "gamma"
+cand_hp = "anti-n0"
 lista_n = "nbar"
 
 if cand_hp == "anti-n0":
@@ -38,9 +38,9 @@ ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="",path
 ma.matchMCTruth("vpho:gen", path=main)
 #kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
 ma.getNeutralHadronGeomMatches(f"{cand_hp}:{lista_n}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
+ma.buildRestOfEvent("vpho:gen", fillWithMostLikely=True, path=main)
 
 #Variables
-#g_vars = vc.kinematics + vc.mc_kinematics + ['mcISR', 'mcPDG', 'genMotherPDG','phi','theta','mcPhi','mcTheta' , 'mcPrimary']
 
 b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 
@@ -52,6 +52,16 @@ b_vars = vu.create_aliases_for_selected(daug_vars, f"^vpho:gen -> [^vpho:list_re
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi- ^gamma] {cand_hp}", prefix = ["vpho_r","gamma"])
 b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- gamma] ^{cand_hp}", prefix = ["nbar"])
     
+#ROE vars
+roe_kinematics = ["roeE()", "roeM()", "roeP()", "roeMbc()", "roeDeltae()"]
+roe_multiplicities = [
+    "nROE_Charged()",
+    "nROE_Photons()",
+    "nROE_NeutralHadrons()",
+]
+b_vars = b_vars + roe_kinematics + roe_multiplicities 
+
+
 #Personal variable alpha
 vm.addAlias("fir_arg","formula(sin(vpho_r_pRecoilTheta)*sin(nbar_theta)*cos(vpho_r_pRecoilPhi-nbar_phi))")
 vm.addAlias("sec_arg","formula(cos(vpho_r_pRecoilTheta)*cos(nbar_theta))")
@@ -65,8 +75,6 @@ vm.addAlias("denE","formula(2*nbar_M)")
 vm.addAlias("nbarE_buona","formula(numE/denE)")
 b_vars = b_vars +['nbarE_buona']
 
-#cmskinematics = vu.create_aliases(vc.kinematics + ['InvM','mRecoil','eRecoil'], "useCMSFrame({variable})", "CMS")
-#b_vars = b_vars + cmskinematics
 
 print(b_vars)
 
@@ -87,8 +95,9 @@ print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
+    #ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/sguaragnok.root",treename="tree",path=main,)
+    #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
 
 else:
     ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_JPsi/vpho_Jpsi_isr_{part}_{lista}_kin_50k.root",treename="tree",path=main,)
