@@ -13,12 +13,12 @@ ma.inputMdstList(filelist="",path=main)
 lista = "REC"
 
 # Ricostruzione delle particelle visibili
-ma.fillParticleList(f"p+:{lista}", "protonID > 0.9 and dr < 1 and abs(dz) < 3", path=main) 
-ma.fillParticleList(f"pi-:{lista}", "pionID > 0.1", path=main)
+ma.fillParticleList(f"p+:{lista}", "", path=main) 
+ma.fillParticleList(f"pi-:{lista}", "", path=main)
 ma.fillParticleList(f"gamma:{lista}", "", path=main) 
 ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
-ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="thetaInECLAcceptance",path=main)
+ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="",path=main)
 ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
@@ -50,18 +50,19 @@ b_vars = b_vars + roe_kinematics + roe_multiplicities
 vm.addAlias("fir_arg","formula(sin(vpho_r_pRecoilTheta)*sin(nbar_theta)*cos(vpho_r_pRecoilPhi-nbar_phi))")
 vm.addAlias("sec_arg","formula(cos(vpho_r_pRecoilTheta)*cos(nbar_theta))")
 vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
-ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
+#ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
 b_vars = b_vars + ['alpha']
 
 sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil <2 and alpha < 0.35 and nbar_isFromECL == 1" 
 sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
-#dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
+dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
 
 cuts= sig_cuts + " and "  + sig_select
 
-ma.applyCuts("vpho:gen", cuts, path=main)
+#ma.applyCuts("vpho:gen", cuts, path=main)
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "grid_out_11122025.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "grid_out_12122025.root",treename="tree",path=main,)
+#ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"grid_topo_12122025.root",treename="tree",path=main,)
 
 b2.process(main)
 

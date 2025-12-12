@@ -1,0 +1,15 @@
+basf2 grid_head.py \
+-i ../../root_file/isr/channel_std/isrPhok_output_merge100k.root \
+-o test_grid.root
+
+gbasf2 \
+-p nbar_cocktail_12122025 \
+-s release-08-01-05 \
+-i /belle/MC/release-08-00-08/DB00003307/MC16rd_proc16/prod00045483/s00/e0012/4S/r06427/uubar/mdst \
+~zanusso/work_nbar/m_macro/grid/grid_head.py 
+
+gbasf2 \
+-p nbar_cocktail_12122025 \
+-s release-08-01-05 \
+-input_dslist input.list \
+~zanusso/work_nbar/m_macro/grid/grid_head.py 
