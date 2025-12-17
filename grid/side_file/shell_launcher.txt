@@ -3,13 +3,19 @@ basf2 grid_head.py \
 -o test_grid.root
 
 gbasf2 \
--p nbar_cocktail_12122025 \
+-p nbar_cocktail_16122025 \
 -s release-08-01-05 \
 -i /belle/MC/release-08-00-08/DB00003307/MC16rd_proc16/prod00045483/s00/e0012/4S/r06427/uubar/mdst \
 ~zanusso/work_nbar/m_macro/grid/grid_head.py 
 
 gbasf2 \
--p nbar_cocktail_12122025 \
+-p nbar_cocktail_merge_16122025 \
 -s release-08-01-05 \
--input_dslist input.list \
+-input_dslist input.txt \
+~zanusso/work_nbar/m_macro/grid/grid_head.py 
+
+gbasf2 \
+-p nbar_cocktail_16122025 \
+-s release-08-01-05 \
+-i belle/collection/MC/MC16rd_proc16_chunk1_uubar_4S_v1 \
 ~zanusso/work_nbar/m_macro/grid/grid_head.py 
