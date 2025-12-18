@@ -50,7 +50,7 @@ b_vars = b_vars + roe_kinematics + roe_multiplicities
 vm.addAlias("fir_arg","formula(sin(vpho_r_pRecoilTheta)*sin(nbar_theta)*cos(vpho_r_pRecoilPhi-nbar_phi))")
 vm.addAlias("sec_arg","formula(cos(vpho_r_pRecoilTheta)*cos(nbar_theta))")
 vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
-#ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
+ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
 b_vars = b_vars + ['alpha']
 
 sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil <2 and alpha < 0.35 and nbar_isFromECL == 1" 
@@ -61,7 +61,7 @@ cuts= sig_cuts + " and "  + sig_select + " and "  + dad_cuts
 
 ma.applyCuts("vpho:gen", sig_select, path=main)
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "grid_out_16122025.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "grid_out_rank_18122025.root",treename="tree",path=main,)
 #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"grid_topo_12122025.root",treename="tree",path=main,)
 
 b2.process(main)
