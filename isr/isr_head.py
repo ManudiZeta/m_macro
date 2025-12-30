@@ -46,11 +46,11 @@ b_vars = vc.kinematics + vc.mc_kinematics + ['isSignal'] + vc.recoil_kinematics
 
 daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcISR','mcFSR', 'genMotherPDG','genMotherID','isFromECL','isFromTrack','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE', 'clusterE','clusterUncorrE']
 
-cluster_vars = ['clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','clusterDeltaLTemp','clusterHighestE','clusterNumberOfHadronDigits','clusterPulseShapeDiscriminationMVA','clusterSecondMoment','distanceToMcNeutron','fakePhotonSuppression']
+cluster_vars = ['clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','clusterDeltaLTemp','clusterHighestE','clusterNumberOfHadronDigits','clusterPulseShapeDiscriminationMVA','clusterSecondMoment','distanceToMcNeutron']
 
 b_vars = vu.create_aliases_for_selected(daug_vars, f"^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^{cand_hp}", prefix = ["mum","vpho_r","p", "pi", "gamma", "nbar"])
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi- ^gamma] {cand_hp}", prefix = ["vpho_r","gamma"])
-b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- gamma] ^{cand_hp}", prefix = ["nbar"])
+b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] ^{cand_hp}", prefix = ["gamma","nbar"])
     
 #ROE vars
 roe_kinematics = ["roeE()", "roeM()", "roeP()", "roeMbc()", "roeDeltae()"]
@@ -78,7 +78,7 @@ b_vars = b_vars +['nbarE_buona']
 
 print(b_vars)
 
-sig_cuts = "vpho_r_mRecoil > 0 and alpha < 0.35 and nbar_isFromECL == 1" 
+sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil < 2 and alpha < 0.35 and nbar_isFromECL == 1" 
 #sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
 sig_select = "p_PDG == 2212 and pi_PDG == -211 and gamma_PDG == 22"
 
@@ -96,7 +96,7 @@ ma.applyCuts("vpho:gen", cuts, path=main)
 
 if choice == 0:
     #ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/sguaragnok.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_n_REC_merge100k_2.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
 
 else:
