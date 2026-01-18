@@ -1036,9 +1036,9 @@ paths=(
 for p in "${paths[@]}"; do
     echo "Running for: $p"
     gbasf2 \
-        -p nbar_collection_29122025 \
+        -p nbar_collection_nog_06012026 \
         -s release-08-01-05 \
         -i "$p" \
-        ~zanusso/work_nbar/m_macro/grid/grid_head.py \
+        ~zanusso/work_nbar/m_macro/grid/grid_head_nog.py \
         --force
 done

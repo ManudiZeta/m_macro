@@ -13,28 +13,34 @@ ma.inputMdstList(filelist="",path=main)
 lista = "REC"
 
 # Ricostruzione delle particelle visibili
-ma.fillParticleList(f"p+:{lista}", "", path=main) 
-ma.fillParticleList(f"pi-:{lista}", "", path=main) 
+ma.fillParticleList(f"p+:{lista}", "protonID > 0.9 and dr < 1 and abs(dz) < 3", path=main) 
+ma.fillParticleList(f"pi-:{lista}", "pionID > 0.1 and dr < 1 and abs(dz) < 3", path=main)
 ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
-ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista}",cut="",path=main)
+ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista}",cut="thetaInECLAcceptance",path=main)
 ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
 #kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
-ma.getNeutralHadronGeomMatches(f"anti-n0:{lista}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
+#ma.getNeutralHadronGeomMatches(f"anti-n0:{lista}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
 ma.buildRestOfEvent("vpho:gen", fillWithMostLikely=True, path=main)
 
 #Variables
 b_vars = vc.kinematics + vc.mc_kinematics + vc.recoil_kinematics
 
-daug_vars = ['isSignal','isPrimarySignal','mcPrimary','isSignal','PDG','mcErrors', 'mcPDG', 'mcISR','mcFSR', 'genMotherPDG','isFromECL','isFromTrack','M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE']
+daug_vars = ['isSignal','isPrimarySignal','mcPrimary','isSignal','PDG','mcErrors', 'mcPDG', 'mcISR','mcFSR', 'genMotherPDG','isFromECL','isFromTrack',
+            'M','p','E','phi','theta','mcPhi','mcTheta','mcP','mcE',"thetaInECLAcceptance"]
 
-cluster_vars = ['clusterE','clusterUncorrE','clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','clusterDeltaLTemp','clusterHighestE','clusterNumberOfHadronDigits','clusterPulseShapeDiscriminationMVA','clusterSecondMoment','distanceToMcNeutron']
+r_vars = ["protonID","pionID","dr","abs(dz)"]
+
+cluster_vars = ['clusterE','clusterUncorrE','clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21',
+                'clusterSecondMoment','clusterDeltaLTemp','clusterHighestE','clusterNumberOfHadronDigits'] #'clusterPulseShapeDiscriminationMVA','distanceToMcNeutron']
 
 b_vars = vu.create_aliases_for_selected(daug_vars, f"^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi-] ^anti-n0", prefix = ["mum","vpho_r","p", "pi", "nbar"])
+b_vars = b_vars + vu.create_aliases_for_selected(r_vars, f"vpho:gen -> [vpho:list_rec -> ^p+ ^pi-] anti-n0", prefix = ["p","pi"])
+
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi-] anti-n0", prefix = ["vpho_r"])
-b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- ] ^anti-n0", prefix = ["nbar"])
+b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi-] ^anti-n0", prefix = ["nbar"])
     
 #ROE vars
 roe_kinematics = ["roeE()", "roeM()", "roeP()", "roeMbc()", "roeDeltae()"]
@@ -52,16 +58,16 @@ vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
 ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
 b_vars = b_vars + ['alpha']
 
-sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil <2 and alpha < 0.35 and nbar_isFromECL == 1" 
-sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211"
-dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
+sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil <2" #and alpha < 0.35 and nbar_isFromECL == 1" 
+#sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211"
+#dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
 
-cuts= sig_cuts + " and "  + sig_select + " and "  + dad_cuts
+cuts = sig_cuts 
 
-ma.applyCuts("vpho:gen", sig_select, path=main)
+ma.applyCuts("vpho:gen", cuts , path=main)
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "grid_out_nog_19122025.root",treename="tree",path=main,)
-#ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"grid_topo_12122025.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename= "15012026_RealSel_nog.root",treename="tree",path=main,)
+#ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"grid_topo_15012026.root",treename="tree",path=main,)
 
 b2.process(main)
 

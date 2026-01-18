@@ -30,14 +30,13 @@ else:
 ma.fillParticleList(f"p+:{lista}", "protonID > 0.9 and dr < 1 and abs(dz) < 3", path=main) 
 ma.fillParticleList(f"pi-:{lista}", "pionID > 0.1", path=main)
 ma.fillParticleList(f"gamma:{lista}", "", path=main) 
-ma.fillParticleList(f"{cand_hp}:{lista_n}", "", path=main)
+ma.fillParticleList(f"anti-n0:{lista}", "", path=main)
 
 ma.reconstructDecay(f"vpho:list_rec -> p+:{lista} pi-:{lista} gamma:{lista}",cut="thetaInECLAcceptance",path=main)
-ma.reconstructDecay(f"vpho:gen -> vpho:list_rec {cand_hp}:{lista_n}",cut="",path=main)
+ma.reconstructDecay(f"vpho:gen -> vpho:list_rec anti-n0:{lista}",cut="",path=main)
 
 ma.matchMCTruth("vpho:gen", path=main)
-#kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
-ma.getNeutralHadronGeomMatches(f"{cand_hp}:{lista_n}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
+ma.getNeutralHadronGeomMatches(f"anti-n0:{lista}", addKL=False, addNeutrons=True, efficiencyCorrectionKl=0.83, efficiencyCorrectionNeutrons=1.0, path=main)
 ma.buildRestOfEvent("vpho:gen", fillWithMostLikely=True, path=main)
 
 #Variables
@@ -48,9 +47,9 @@ daug_vars = ['isSignal','PDG','mcErrors', 'mcPDG', 'mcISR','mcFSR', 'genMotherPD
 
 cluster_vars = ['clusterNHits','clusterLAT','clusterE1E9','clusterAbsZernikeMoment40','clusterAbsZernikeMoment51','clusterE9E21','clusterDeltaLTemp','clusterHighestE','clusterNumberOfHadronDigits','clusterPulseShapeDiscriminationMVA','clusterSecondMoment','distanceToMcNeutron']
 
-b_vars = vu.create_aliases_for_selected(daug_vars, f"^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^{cand_hp}", prefix = ["mum","vpho_r","p", "pi", "gamma", "nbar"])
-b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi- ^gamma] {cand_hp}", prefix = ["vpho_r","gamma"])
-b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] ^{cand_hp}", prefix = ["gamma","nbar"])
+b_vars = vu.create_aliases_for_selected(daug_vars, f"^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["mum","vpho_r","p", "pi", "gamma", "nbar"])
+b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi- ^gamma] anti-n0", prefix = ["vpho_r","gamma"])
+b_vars = b_vars + vu.create_aliases_for_selected(cluster_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- ^gamma] ^anti-n0", prefix = ["gamma","nbar"])
     
 #ROE vars
 roe_kinematics = ["roeE()", "roeM()", "roeP()", "roeMbc()", "roeDeltae()"]
@@ -79,8 +78,7 @@ b_vars = b_vars +['nbarE_buona']
 print(b_vars)
 
 sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil < 2 and alpha < 0.35 and nbar_isFromECL == 1" 
-#sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211 and gamma_mcPDG == 22"
-sig_select = "p_PDG == 2212 and pi_PDG == -211 and gamma_PDG == 22"
+#sig_select = "p_PDG == 2212 and pi_PDG == -211 and gamma_PDG == 22"
 
 if choice == 0:
     dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
@@ -90,13 +88,15 @@ else:
     dad_cuts = "p_genMotherPDG == 443 and pi_genMotherPDG == 443" #and JPsi_genMotherPDG == 10022"
     #n0_cuts = "nbar_genMotherPDG == 443" 
 
-cuts= sig_cuts + " and "  + sig_select + " and " + dad_cuts 
+cuts= sig_cuts + " and " + dad_cuts 
 print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
+kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
+
 if choice == 0:
     #ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
-    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_std_isr_n_REC_merge100k_2.root",treename="tree",path=main,)
+    ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/isr/channel_std/vpho_isr_n_REC_merge100k_10012026_KIN.root",treename="tree",path=main,)
     #ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/isr/isr_TOPO/vpho_std_isr_{part}_{lista}_merge100k.root",treename="tree",path=main,)
 
 else:
