@@ -33,14 +33,21 @@ cluster_vars = ["clusterE","clusterE1E9","clusterE9E21", "clusterLAT",
                 "clusterNHits"]
 
 other_vars = ["p","theta","phi","mcP","mcTheta","mcPhi","isFromECL","hasAncestor(-2112, 1)","hasAncestor(22, 1)","hasAncestor(211, 0)",
-              "varForFirstMCAncestorOfType(anti-n0, p)","varForFirstMCAncestorOfType(anti-n0, mcP)"]
+              "varForFirstMCAncestorOfType(anti-n0, p)","varForFirstMCAncestorOfType(anti-n0, mcP)",
+              "varForFirstMCAncestorOfType(anti-n0, theta)","varForFirstMCAncestorOfType(anti-n0, mcTheta)"]
 
-n_vars = cluster_vars + other_vars
+vertex_vars = [ "distance", "mcDecayVertexFromIPDistance", "mcDecayVertexFromIPRho",
+                "mcDecayVertexX", "mcDecayVertexY", "mcDecayVertexZ",
+                "mcProductionVertexX","mcProductionVertexY","mcProductionVertexZ",
+                "prodVertexX","prodVertexY","prodVertexZ"]
+
+n_vars = cluster_vars + other_vars + vertex_vars
 
 b_vars = vu.create_aliases_for_selected(base_vars, f"^vpho:gen -> [^vpho:list_rec -> ^p+ ^pi- ^gamma] ^anti-n0", prefix = ["mum","vpho_r","p","pi","gamma","nbar"])
-b_vars = b_vars + vu.create_aliases_for_selected(n_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- gamma] ^anti-n0", prefix = ["nbar"])
+
 b_vars = b_vars + vu.create_aliases_for_selected(vc.recoil_kinematics, f"vpho:gen -> [^vpho:list_rec -> p+ pi- gamma] anti-n0", prefix = ["vpho_r"])
-    
+
+b_vars = b_vars + vu.create_aliases_for_selected(n_vars, f"vpho:gen -> [vpho:list_rec -> p+ pi- gamma] ^anti-n0", prefix = ["nbar"])    
 #ROE vars
 roe_kinematics = ["roeE()", "roeM()", "roeP()", "roeMbc()", "roeDeltae()"]
 roe_multiplicities = [
@@ -51,6 +58,8 @@ roe_multiplicities = [
 b_vars = b_vars + roe_kinematics + roe_multiplicities 
 
 
+ma.applyCuts("vpho:gen", "nbar_clusterNHits>10", path=main)
+
 #Personal variable alpha
 vm.addAlias("fir_arg","formula(sin(vpho_r_pRecoilTheta)*sin(nbar_theta)*cos(vpho_r_pRecoilPhi-nbar_phi))")
 vm.addAlias("sec_arg","formula(cos(vpho_r_pRecoilTheta)*cos(nbar_theta))")
@@ -58,19 +67,23 @@ vm.addAlias("alpha","formula(acos(fir_arg + sec_arg))")
 ma.rankByLowest("vpho:gen", "alpha", numBest=1, path=main)
 b_vars = b_vars + ["alpha"]
 
+#Personal variable MC_ray
+vm.addAlias("MC_rayProd","formula((nbar_mcProductionVertexX*nbar_mcProductionVertexX + nbar_mcProductionVertexY*nbar_mcProductionVertexY + nbar_mcProductionVertexZ*nbar_mcProductionVertexZ)^1/2)")
+b_vars = b_vars + ["MC_rayProd"]
+
 sig_cuts = "vpho_r_mRecoil > 0 and vpho_r_mRecoil < 2 and alpha < 0.35 and nbar_isFromECL == 1" 
 sig_select = "p_mcPDG == 2212 and pi_mcPDG == -211"
 
 dad_cuts = "p_genMotherPDG == 10022 and pi_genMotherPDG == 10022"
 
-cuts= sig_cuts + " and " + sig_select + " and " + dad_cuts 
+cuts = sig_cuts + " and " + sig_select + " and " + dad_cuts 
 print(" *** ", cuts, " *** ")
 ma.applyCuts("vpho:gen", cuts, path=main)
 
 #kinfit.MassfitKinematic1CRecoil(list_name = "vpho:list_rec", recoilMass = 0.939565, path=main)
 
-ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/mc_ass_stud/mother_stud.root",treename="tree",path=main,)
-ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/mc_ass_stud/topoana/mother_stud.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=b_vars,filename=f"../../root_file/mc_ass_stud/mother_stud_NHits_cut.root",treename="tree",path=main,)
+ma.variablesToNtuple("vpho:gen",variables=mc_gen_topo(200),filename=f"../../root_file/mc_ass_stud/topoana/mother_stud_2.root",treename="tree",path=main,)
 
 b2.process(main)
 
